@@ -29,7 +29,7 @@
 import Foundation
 
 /// The delegate for the EasyPicker view.
-protocol EasyPickerDelegate: class {
+public protocol EasyPickerDelegate: class {
 	/// Called by the EasyPicker when a value has been picked.
 	///
 	/// - Parameter picker: The EasyPicker in which a value was picked.
@@ -37,7 +37,7 @@ protocol EasyPickerDelegate: class {
 }
 
 /// An object that displays a pickable text area in your interface.
-@IBDesignable class EasyPicker : UITextField, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+@IBDesignable public class EasyPicker : UITextField, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
 	// IB will only display IBInspectable properties if they are within a small set of types, not including NSTextAlignment or UITextBorderStyle.  As a result, we can get those in IB by putting Int proxies for them in.  The proxies will not display in IB unless we specify their type.
 	// There seems to be no way for IB to deal with the base class properties that these are redefining other than replace them in this manner and just ignore the base class entries in Attribute Inspector that won't do anything now.
@@ -69,19 +69,19 @@ protocol EasyPickerDelegate: class {
 	/// A delegate to be informed when a value is picked.
 	public var easyPickerDelegate:EasyPickerDelegate? = nil
 
-	// MARK: - Non-public Members
+	// MARK: - Non-user Members
 
-	override func awakeFromNib() {
+	public override func awakeFromNib() {
 		super.awakeFromNib()
 		setup()
 	}
-	override func layoutSubviews() {
+	public override func layoutSubviews() {
 		super.layoutSubviews()
 		setup()
 	}
 
 	/// Called by Interface Builder to allow correct drawing.
-	override func prepareForInterfaceBuilder() {
+	public override func prepareForInterfaceBuilder() {
 		super.prepareForInterfaceBuilder()
 		setupCommon()
 	}
@@ -124,7 +124,7 @@ protocol EasyPickerDelegate: class {
 	private var pickerInputView: UIView? = nil
 
 	// The text field was touched and the picker will open.
-	func textFieldDidBeginEditing(_ textField: UITextField) {
+	public func textFieldDidBeginEditing(_ textField: UITextField) {
 		// Move the picker to reflect the current value.
 		if let text = text {
 			if let index = options.index(of: text) {
@@ -136,7 +136,7 @@ protocol EasyPickerDelegate: class {
 	}
 
 	// The frame of the view.
-	override var frame: CGRect {
+	public override var frame: CGRect {
 		didSet {
 			// Respond to rotation and screen split.
 			// TODO: Support for Split View needs to be tested.
@@ -156,25 +156,25 @@ protocol EasyPickerDelegate: class {
 	}
 
 	// The number of columns of data.
-	func numberOfComponents(in pickerView: UIPickerView) -> Int {
+	public func numberOfComponents(in pickerView: UIPickerView) -> Int {
 		return 1
 	}
 
 	// The number of rows of data.
-	func pickerView(_ pickerView: UIPickerView,
+	public func pickerView(_ pickerView: UIPickerView,
 					numberOfRowsInComponent component: Int) -> Int {
 		return options.count
 	}
 
 	// The data to return for the row and component (column) that's being passed in.
-	func pickerView(_ pickerView: UIPickerView,
+	public func pickerView(_ pickerView: UIPickerView,
 					titleForRow row: Int,
 					forComponent component: Int) -> String? {
 		return options[row]
 	}
 
 	// The selection picked.
-	func pickerView(_ pickerView: UIPickerView,
+	public func pickerView(_ pickerView: UIPickerView,
 					didSelectRow row: Int,
 					inComponent component: Int) {
 		if ( isEditing ) {
