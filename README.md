@@ -29,6 +29,6 @@ The integration into Interface Builder is less than ideal but far more than none
 The touchesBegan method has to be outside of EasyPicker, even though it would be nice to have it rolled in.
 
 ## Work Items
-* The hard-coded height may be incorrect in 1x and 4x environments
+* The hard-coded height may be incorrect in 1x and 4x environments.
 * Support for Split View needs to be tested.
 * It might be possible to put the UIPickerView and containing UIView in static members and share them to reduce resource consumption.
