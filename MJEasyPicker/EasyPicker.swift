@@ -97,22 +97,29 @@ public protocol EasyPickerDelegate: class {
 	/// Run-time setup items.
 	func setup() {
 		picker = UIPickerView(frame: CGRect(x: 0, y: 40, width: 0, height: 0))
-		pickerInputView = UIView(frame: CGRect(x: 0, y: 0, width: 240, height: 240))
-
-		setupCommon()
-
-		let tintColor: UIColor = UIColor(red: 101.0/255.0, green: 98.0/255.0, blue: 164.0/255.0, alpha: 1.0)
-		adjustFrame()
 		if let picker = picker {
-			picker.tintColor = tintColor
-			pickerInputView?.addSubview(picker) // add picker to UIView
+			pickerInputView = UIView(frame: CGRect(x: 0, y: 0, width: 240, height: 240))
+			if let pickerInputView = pickerInputView {
 
-			picker.delegate = self
-			picker.dataSource = self
+				picker.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+
+				setupCommon()
+
+				let tintColor: UIColor = UIColor(red: 101.0/255.0, green: 98.0/255.0, blue: 164.0/255.0, alpha: 1.0)
+				if let superview = superview {
+					pickerInputView.frame = CGRect(x: 0, y: 0, width: superview.frame.width, height: 240)
+				}
+				picker.frame = pickerInputView.frame
+				picker.tintColor = tintColor
+				pickerInputView.addSubview(picker) // add picker to UIView
+
+				picker.delegate = self
+				picker.dataSource = self
+
+				inputView = pickerInputView
+				delegate = self
+			}
 		}
-
-		inputView = pickerInputView
-		delegate = self
 	}
 
 	// TODO: It might be possible to put the UIPickerView and containing UIView in static members and share them to reduce resource consumption.
@@ -131,26 +138,6 @@ public protocol EasyPickerDelegate: class {
 				picker?.selectRow(index,
 								  inComponent: 0,
 								  animated: false)
-			}
-		}
-	}
-
-	// The frame of the view.
-	public override var frame: CGRect {
-		didSet {
-			// Respond to rotation and screen split.
-			// TODO: Support for Split View needs to be tested.
-			adjustFrame()
-		}
-	}
-
-	/// Adjusts the picker's frame in response to changing view frame.
-	private func adjustFrame() {
-		if let superview = superview {
-			if let pickerInputView = pickerInputView {
-				// TODO: The hard-coded height may be incorrect in 1x and 4x environments.
-				pickerInputView.frame = CGRect(x: 0, y: 0, width: superview.frame.width, height: 240)
-				picker?.center.x = pickerInputView.center.x
 			}
 		}
 	}
